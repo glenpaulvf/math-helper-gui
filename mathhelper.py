@@ -49,6 +49,7 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             self.__output(str(sympify(input)))
         except:
             try:
+                print "second"
                 # Basic SymPy syntax:
                 # <expression>
                 
@@ -56,7 +57,7 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
                 input = re.sub(regex_comparam, r"\2", input)
                 
                 # Output result of SymPy input
-                self.__output(self.__eval(input))
+                self.__output(str(sympify(input)))
             except:
                 # No valid input detected
                 
