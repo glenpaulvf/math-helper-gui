@@ -1,12 +1,13 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtCore import Qt
 from design import Ui_MathHelperWindow
 
 
 class MathHelper(QMainWindow, Ui_MathHelperWindow):
     
     def __init__(self):
-        super(MathHelper, self).__init__()
+        super(MathHelper, self).__init__(flags = Qt.WindowStaysOnTopHint)
         self.setupUi(self)
         self.__exec()
         
