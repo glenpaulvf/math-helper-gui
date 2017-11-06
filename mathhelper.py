@@ -88,6 +88,8 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
         return command
     
     def __output(self, result):
+        # Replace '**' with '^'
+        result = re.sub(r"\*\*", "^", result)
         self.outputLabel.setText(result)
         
 
