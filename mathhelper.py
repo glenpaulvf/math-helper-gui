@@ -17,14 +17,15 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
         self.inputBox.returnPressed.connect(self.__parse_input)
     
     def __parse_input(self):
-        input = self.inputBox.text()
-        
         regex_comparam = "^([A-Za-z]+)?(.*)$"
         regex_expvar = "^\((|.+),\s*(|\w+)\)$"
         
         try:
             # Basic syntax of SymPy:
             # <command>(<expression>, <variable>)
+            
+            # Get input
+            input = self.inputBox.text()
             
             # Extract command
             com = re.sub(regex_comparam, r"\1", input)
@@ -40,10 +41,7 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             
             # Parse command and expression for possible keyword substitutions
             com = self.__parse_command(com)
-            exp = re.sub(r"\^", "**", exp)
-            
-            if re.search(r"=", exp) is not None:
-                exp = re.sub(r"(.+) = (.+)", r"\1 - (\2)", exp)
+            exp = self.__parse_expression(exp)
             
             # Concatenate input back together
             input = com + "(" + exp + "," + var + ")" 
@@ -55,9 +53,16 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
                 # Basic SymPy syntax:
                 # <expression>
                 
-                # Extract expression
-                input = re.sub(regex_comparam, r"\2", input)
+                # Get input
+                input = self.inputBox.text()
                 
+                # Parse expression for possible keyword substitutions
+                input = self.__parse_expression(input)
+                
+                # Invoke the SymPy solve function for equations
+                if re.search(r"[A-Za-z]", input) is not None:
+                    input = re.sub(r"(.+)", r"solve(\1)", input)
+
                 # Output result of SymPy input
                 self.__output(str(sympify(input)))
             except:
@@ -89,6 +94,17 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
         
         # Command was not related to derivative, integral, or solve functions
         return command
+    
+    def __parse_expression(self, expression):
+        # Allow '^' for '**'
+        expression = re.sub(r"\^", "**", expression)
+
+        # Allow SymPy equations to be expressed with '='
+        if re.search(r"=", expression) is not None:
+            expression = re.sub(r"(.+) = (.+)", r"\1 - (\2)", expression)
+                
+        # Return expression
+        return expression
     
     def __output(self, result):
         # Replace '**' with '^'
