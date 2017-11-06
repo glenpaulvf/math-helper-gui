@@ -20,6 +20,7 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
         input = self.inputBox.text()
         
         derivative_keywords = ["diff", "differentiate", "derivative"]
+        integral_keywords = ["int", "integrate", "integral"]
         
         regex_comparam = "^([A-Za-z]+)?(.*)$"
         regex_expvar = "^\((|.+),\s*(|\w+)\)$"
@@ -40,10 +41,16 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             # Extract variable
             var = re.sub(regex_expvar, r"\2", param)
             
-            # Allow multiple keywords for derivative function diff
+            # Allow multiple keywords for SymPy derivative function diff
             for d in derivative_keywords:
                 if com == d:
                     com = "diff"
+                    break
+            
+            # Allow multiple keywords for SymPy integrate function integrate
+            for i in integral_keywords:
+                if com == i:
+                    com = "integrate"
                     break
             
             # Concatenate input back together
