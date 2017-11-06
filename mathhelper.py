@@ -21,10 +21,6 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
         
         regex_comparam = "^([A-Za-z]+)?(.*)$"
         regex_expvar = "^\((|.+),\s*(|\w+)\)$"
-
-        derivative_keywords = ["diff", "differentiate", "derivative"]
-        integral_keywords = ["int", "integrate", "integral"]
-        solve_keywords = ["sol", "solve", "solution"]
         
         try:
             # Basic syntax of SymPy:
@@ -42,23 +38,9 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             # Extract variable
             var = re.sub(regex_expvar, r"\2", param)
             
-            # Allow multiple keywords for SymPy derivative function diff
-            for d in derivative_keywords:
-                if com == d:
-                    com = "diff"
-                    break
-            
-            # Allow multiple keywords for SymPy integrate function integrate
-            for i in integral_keywords:
-                if com == i:
-                    com = "integrate"
-                    break
-                
-            # Allow multiple keywords for SymPy solving function solve
-            for s in solve_keywords:
-                if com == s:
-                    com = "solve"
-                    break
+            # Parse command for possible keyword substitutions
+            com = self.__parse_command(com)
+            print com
             
             # Concatenate input back together
             input = com + param 
@@ -81,7 +63,30 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
                 # Output error message
                 error_msg = "Error: invalid input"
                 self.__output(error_msg)
+    
+    def __parse_command(self, command):
+        derivative_keywords = ["diff", "differentiate", "derivative"]
+        integral_keywords = ["int", "integrate", "integral"]
+        solve_keywords = ["sol", "solve", "solution"]
+
+        # Allow multiple keywords for SymPy derivative function diff
+        for d in derivative_keywords:
+            if command == d:
+                return "diff"
             
+        # Allow multiple keywords for SymPy integrate function integrate
+        for i in integral_keywords:
+            if command == i:
+                return "integrate"
+                
+        # Allow multiple keywords for SymPy solving function solve
+        for s in solve_keywords:
+            if command == s:
+                return "solve"
+        
+        # Command was not related to derivative, integral, or solve functions
+        return command
+    
     def __output(self, result):
         self.outputLabel.setText(result)
         
