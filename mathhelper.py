@@ -19,11 +19,12 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
     def __parse_input(self):
         input = self.inputBox.text()
         
-        derivative_keywords = ["diff", "differentiate", "derivative"]
-        integral_keywords = ["int", "integrate", "integral"]
-        
         regex_comparam = "^([A-Za-z]+)?(.*)$"
         regex_expvar = "^\((|.+),\s*(|\w+)\)$"
+
+        derivative_keywords = ["diff", "differentiate", "derivative"]
+        integral_keywords = ["int", "integrate", "integral"]
+        solve_keywords = ["sol", "solve", "solution"]
         
         try:
             # Basic syntax of SymPy:
@@ -51,6 +52,12 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             for i in integral_keywords:
                 if com == i:
                     com = "integrate"
+                    break
+                
+            # Allow multiple keywords for SymPy solving function solve
+            for s in solve_keywords:
+                if com == s:
+                    com = "solve"
                     break
             
             # Concatenate input back together
