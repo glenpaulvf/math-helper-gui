@@ -42,6 +42,9 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             com = self.__parse_command(com)
             exp = re.sub(r"\^", "**", exp)
             
+            if re.search(r"=", exp) is not None:
+                exp = re.sub(r"(.+) = (.+)", r"\1 - (\2)", exp)
+            
             # Concatenate input back together
             input = com + "(" + exp + "," + var + ")" 
             
