@@ -49,7 +49,6 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             self.__output(str(sympify(input)))
         except:
             try:
-                print "second"
                 # Basic SymPy syntax:
                 # <expression>
                 
