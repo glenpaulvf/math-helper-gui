@@ -1,4 +1,5 @@
 import sys
+from sympy import sympify
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import Qt
 from design import Ui_MathHelperWindow
@@ -12,13 +13,16 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
         self.__exec()
         
     def __exec(self):
-        self.inputBox.returnPressed.connect(self.output)
+        self.inputBox.returnPressed.connect(self.__parse_input)
     
-    def __output(self):
+    def __parse_input(self):
         input = self.inputBox.text()
-        self.outputLabel.setText(input)
         
-
+        self.__output(str(sympify(input)))
+    
+    def __output(self, result):
+        self.outputLabel.setText(result)
+        
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
