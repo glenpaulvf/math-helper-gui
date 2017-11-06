@@ -38,11 +38,12 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             # Extract variable
             var = re.sub(regex_expvar, r"\2", param)
             
-            # Parse command for possible keyword substitutions
+            # Parse command and expression for possible keyword substitutions
             com = self.__parse_command(com)
+            exp = re.sub(r"\^", "**", exp)
             
             # Concatenate input back together
-            input = com + param 
+            input = com + "(" + exp + "," + var + ")" 
             
             # Output result of SymPy input
             self.__output(str(sympify(input)))
