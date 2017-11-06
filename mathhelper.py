@@ -40,7 +40,6 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
             
             # Parse command for possible keyword substitutions
             com = self.__parse_command(com)
-            print com
             
             # Concatenate input back together
             input = com + param 
