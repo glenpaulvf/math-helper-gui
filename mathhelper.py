@@ -14,7 +14,7 @@ class MathHelper(QMainWindow, Ui_MathHelperWindow):
     def __exec(self):
         self.inputBox.returnPressed.connect(self.output)
     
-    def output(self):
+    def __output(self):
         input = self.inputBox.text()
         self.outputLabel.setText(input)
         
